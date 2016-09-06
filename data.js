@@ -1,100 +1,96 @@
 window.onload = function() {
-        
-        var drawTree   = new BuildFileTree();
-        drawTree.render(data);
-
-
-      
-
+    var drawTree = new BuildFileTree();
+    drawTree.render(data);
 };
 
 
+function BuildFileTree() {
+    if(this instanceof BuildFileTree){
+         
+    }else{
+      throw new Error("invoked without new");
+    }
+      
+    
+}       
 
-function addClick(){
+// function BuildFileTree(data) {
+//   let self = this;
+//   this.data = data
+//   this.render = function() { 
+//     self.processTree()
+//   }
+// }
+
+// BuildFileTree.prototype = {
+
+//   data: null,
+// }
+
+
+
+
+
+BuildFileTree.prototype.render = function(data){
   
-   let ulist = document.getElementsByTagName('ul');
-   
-   
+  var data    = data;
+  var body     = document.getElementsByTagName("body")[0]; 
 
-  //一開始將所有項隱藏
-  for(let i = 0;i<ulist.length;i++){
-        if(ulist[i].children.length>1){
-          for(let k=1;k<ulist[i].children.length;k++){
-                ulist[i].children[k].style.display="none";
+  var fragment = document.createDocumentFragment();
+  fragment     = this.processTree(data,fragment);
+  console.log(fragment);
+  // console.log(fragment);
+  // var a  = document.createElement("div");
+  body.appendChild(fragment);
+  
+}
 
-          }      
-        }
-  }
-  //加入click事件
-  for(let i = 0;i<ulist.length;i++){
+// var data = [
+//   {name:1},
+//   {name:2,data:[{name:"data2"}]},
+//   {name:3,data:null},
+//   {name:4,data:[]}
+// ];
 
-      if(ulist[i].children.length>1){
-         ulist[i].children[0].style.cursor = "pointer";
-         ulist[i].children[0].addEventListener('click',function(){
-                
-               for(let k=1,len=ulist[i].children.length;k<len;k++){
-                   if( ulist[i].children[k].style.display=="none"){
-                
-                        ulist[i].children[k].style.display = 'block';
-                       
-                   }else{
 
-                        ulist[i].children[k].style.display = 'none';
-                     
-                   
-                   }
 
-                        
-               } 
-         });
+BuildFileTree.prototype.processTree = function(data){
+  var tempData = data;
+  var tempNode =document.createDocumentFragment();
+      
+  for(let i=0,len=tempData.length;i<len;i++){
+
+      if(tempData[i].name){
+        tempNode.appendChild(createNode(tempData[i].name));
+        
       }
+      if(tempData[i].data && tempData[i].data !== null){
+         if(tempData[i].data.length>0){
+          console.log(tempNode.lastElementChild);
 
+           tempNode.lastElementChild.appendChild(this.processTree(tempData[i].data));
+         }
+      }
   }
+   
+  
+  return tempNode;
 
 }
 
 
+function createNode(data){
+  let  ul   = document.createElement("ul");
+  let  li   = document.createElement("li");  
+  let  text = document.createTextNode(data);
+  li.appendChild(text);
+  ul.appendChild(li);
+  return ul;
+}
 
 
 
-function BuildFileTree(data) {
-        var tree="";
-        for(let i =0, len=data.length;i<len;i++){
-
-             tree += "<ul class='tree-folder'>";
-             
-             for(let key in data[i]){
-                 let tempData=data[i];
-                if(tempData[key]===null){break;}
-                if(key==="data" && tempData[key]!== null){ 
-                  if(tempData[key].length ===0){
-                    break;
-                  
-                  }
-                  tree+=build_file_tree(tempData[key]);
-                }else{
-                   //tree+="<li class='i'>"+tempData[key]+"</li>";  
-                   tree+=`<li >${tempData[key]}</li>`;
-                }
-
-                
-
-             }   
-             tree+="</ul>";
-            
-        }   
-        return  tree; 
-        
-}              
-
-
-
-
-
-        
-
-
-
+      
 
 
 
