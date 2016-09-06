@@ -111,7 +111,17 @@ function createNode(data){
 
 
       
+function traverse(ul) {
+    if (!ul) return;
+    
+    var li = ul...... get li
+    li.addEventListener(....)
 
+    return 
+
+    let xxx = traverse(ul.children)
+
+}
 
 
 
