@@ -66,7 +66,7 @@ BuildFileTree.prototype.processTree = function(data){
       }
       if(tempData[i].data && tempData[i].data !== null){
          if(tempData[i].data.length>0){
-          console.log(tempNode.lastElementChild);
+          //console.log(tempNode.lastElementChild);
 
            tempNode.lastElementChild.appendChild(this.processTree(tempData[i].data));
          }
@@ -82,9 +82,29 @@ BuildFileTree.prototype.processTree = function(data){
 function createNode(data){
   let  ul   = document.createElement("ul");
   let  li   = document.createElement("li");  
+
+
+  
   let  text = document.createTextNode(data);
+
   li.appendChild(text);
+  
+  
   ul.appendChild(li);
+  if(!!text.data.indexOf("系統") && !!text.data.indexOf("本機")){
+    ul.style.display = "none";
+  }
+  console.log(li.parentNode.children.length);
+  li.addEventListener('click',function(){
+     for(let i = 1,len=li.parentNode.children.length;i<len;i++){
+        if(li.parentNode.children[1].style.display == 'block'){
+        li.parentNode.children[1].style.display = 'none';
+          
+        }
+        li.parentNode.children[1].style.display = 'block';
+          
+     }
+  });
   return ul;
 }
 
